@@ -5,6 +5,8 @@
 
 [//]: # (Image References)
 
+
+
 [image1]: ./examples/visualization.jpg "Visualization"
 [image2]: ./examples/grayscale.jpg "Grayscaling"
 [image3]: ./examples/random_noise.jpg "Random Noise"
