@@ -8,16 +8,14 @@
 [img1]: ./writeup_images/training_set.png "Visualization"
 [img2]: ./writeup_images/training_labels_hist.png "Histogram Labels"
 [img3]: ./writeup_images/preprocess.png "Preprocess"
-
-[image1]: ./examples/visualization.jpg "Visualization"
-[image2]: ./examples/grayscale.jpg "Grayscaling"
-[image3]: ./examples/random_noise.jpg "Random Noise"
-[image4]: ./examples/placeholder.png "Traffic Sign 1"
-[image5]: ./examples/placeholder.png "Traffic Sign 2"
-[image6]: ./examples/placeholder.png "Traffic Sign 3"
-[image7]: ./examples/placeholder.png "Traffic Sign 4"
-[image8]: ./examples/placeholder.png "Traffic Sign 5"
-
+[img4]: ./writeup_images/training.png "Training"
+[img5]: ./writeup_images/web_images.png "Web Images"
+[img6]: ./writeup_images/softmax_priority.png "Priority"
+[img7]: ./writeup_images/softmax_stop_simple.png "Stop1"
+[img8]: ./writeup_images/softmax_roundabout.png "Roundabout"
+[img9]: ./writeup_images/softmax_stop_hard.png "Stop2"
+[img10]: ./writeup_images/softmax_children.png "Children"
+[img11]: ./writeup_images/softmax_60.png "60"
 
 ---
 ### 1- Dataset 
@@ -34,11 +32,11 @@
 
 - Number of classes = 43
 
-The dataset includes additional information about the original sizes of the images before being resized to 32x32, as well as the coordinates in the original images that delimit the sign. This extra information is not used at all in this project.
+The dataset includes additional information about the original sizes of the images before being resized to 32x32, as well as the coordinates in the original images that delimit the sign. This extra information is not used in this project.
 
 ##### Exploratory visualization:
 
-Random images samples from each one of the classes/labels, the sign is usually located in the center of the image with no cropping. The images have different levels of exposure, as visually, some of them, are almost completely dark. 
+Random images samples from each one of the classes/labels, the sign is usually located in the center of the image with no cropping. The images have different levels of exposure, some of them are almost completely dark. 
 
 ![alt text][img1]
 
@@ -92,41 +90,59 @@ Hyperparameters:
 - Batch Size : `128`
 - Learning rate: `0.001`
 - Dropout probability: `50%`
-- Epochs: `40`
+- Epochs: `30`
 
+![alt text][img4]
 
 ##### Solution Approach:
 
-
-As it stands outs, the default parameters used for LeNet 5 are already sufficient to get  good accuracy over the training set. Only the additional dropout layers were added to further increase the accuracy. Some experimentation was done by feeding RGB images to the model instead of grayscale, but based on the accuracy levels there's no evidence that color images perform better.
+The default parameters used for LeNet 5 are already sufficient to get good accuracy over the training set. Only additional dropout layers were added to further increase the accuracy. Some experimentation was done by feeding RGB images to the model instead of grayscale, but the accuracy values were very similar. 
 
 The test accuracy obtained is around `94%`
 
-
+---
 #### 3 - Testing new images
 
 ##### Acquiring New Images:
 
-A set of traffic sign photos was obtained through a google images search, and cropped more or less accordingly to the data set, but not exactly. The images have different resolutions and sizes so a resizing to 32x32 was performed using `cv2.resize`.
+A set of eight photos were obtained through a google images search, and cropped more or less accordingly to the data set, but not exactly. The images have different resolutions and sizes so a resizing to 32x32 was performed using `cv2.resize`. The result after the resize is shown below:
 
-The stop signal image in particular is an attempt to fool the A.I. of autonpmous driving vehicles.  
+![alt text][img5]
 
+Some images are purposely difficult like the stop signal in the bottom left corner, which is an attempt to fool the A.I. of autonomous driving vehicles by putting black and white stickers on top. 
 
-
-
-The submission includes five new German Traffic signs found on the web, and the images are visualized. Discussion is made as to particular qualities of the images or traffic signs in the images that are of interest, such as whether they would be difficult for the model to classify.
 
 ##### Performance on New Images:
 
-The submission documents the performance of the model when tested on the captured images. The performance on the new images is compared to the accuracy results of the test set.
+The model predicted correctly 4 out of 8 images resulting in 50% accuracy rate which is a value much lower than the one from the test set. 
+
+The results also vary (from 3 to 6 correct images) just by re-running the training, the softmax probabilities can also be completely different from run to run (for a given particular image), which is kind of unexpected. 
 
 ##### Model Certainty - Softmax Probabilities:
 
-The top five softmax probabilities of the predictions on the captured images are outputted. The submission discusses how certain or uncertain the model is of its predictions.
+The priority signal and the simple stop are the only ones that are correctly identified with a high certainty.
 
+![alt text][img6]
+
+![alt text][img7]
+
+
+The following ones are sometimes correctly predicted with low certainty:
+
+![alt text][img8]
+
+![alt text][img9]
+
+![alt text][img10]
+
+![alt text][img11]
+
+However looking at the second/third highest softmax classes they are often of similar shape (60 sign classified as 80, roundabout and priority road both have arrows, and so on).
+
+---
 #### 4 - Improvements
 
-- Augmenting the training set might help improve model certainity. Common data augmentation techniques include rotation, translation, zoom, flips, inserting jitter, and/or color perturbation. Tensorflow v2 seems to already have embedded tools for this purpose.
+- Augmenting the training set might help improve model certainty. Common data augmentation techniques include rotation, translation, zoom, flips, inserting jitter, and/or color perturbation. Tensorflow v2 seems to already have embedded tools for this purpose.
 
 - Perform error analysis to identify which image characteristics the model has a harder time to classify.   
 
